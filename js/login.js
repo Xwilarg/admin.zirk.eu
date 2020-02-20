@@ -19,6 +19,7 @@ document.getElementById("loginButton").addEventListener("click", function() {
     .then(result => {
         let date = new Date();
         document.cookie = "sessionToken=" + result.token + "; expires=" + new Date(date.getFullYear() + 10, date.getMonth(), date.getDay());
+        document.location.href = "index.html";
     })
     .catch(error => document.getElementById("loginStatus").innerHTML = error);
 });
@@ -37,15 +38,15 @@ if (regex != null) {
     })
     .then(response => {
         if (response.ok) {
-            return response.json();
+            return response.text();
         }
         throw new Error("HTTP " + response.status);
     })
-    .then(result => {
-        console.log("Already logged in");
+    .then(_ => {
+        document.location.href = "index.html";
     })
     .catch(error => {
-        console.error("Can't login using stored token.");
+        console.error("Can't login using stored token");
         document.cookie = "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     });
 }
