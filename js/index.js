@@ -4,7 +4,7 @@
         let token = regex[2];
         let postData = new URLSearchParams();
         postData.append('token', token);
-        fetch("https://restarter.zirk.eu/tokenCheck", {
+        fetch("https://restarter.zirk.eu/userList", {
             method: 'POST',
             headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -13,20 +13,17 @@
         })
         .then(response => {
             if (response.ok) {
-                return response.text();
+                return response.json();
             }
             throw new Error("HTTP " + response.status);
         })
-        .then(_ => {
-            // Token still valid, nothing to do
+        .then(result => {
+            let str = "";
+            result.users.forEach(function(user) {
+                str += user.username + ": " + user.permissions + "<br/>";
+            });
+            document.getElementById("userList").innerHTML = str;
         })
-        .catch(error => {
-            document.cookie = "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-            document.location.href = "login.html";
-        });
-    }
-    else
-    {
-        document.location.href = "login.html";
+        .catch(error => document.getElementById("userList").innerHTML = error);
     }
 }
