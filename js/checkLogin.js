@@ -7,7 +7,7 @@
         fetch("https://restarter.zirk.eu/tokenCheck", {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: postData
         })

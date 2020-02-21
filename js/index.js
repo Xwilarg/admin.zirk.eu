@@ -3,6 +3,11 @@
     if (regex != null) {
         let token = regex[2];
 
+        document.getElementById("logout").addEventListener("click", function() {
+            document.cookie = "sessionToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.location.href = "login.html";
+        });
+
         document.getElementById("createButton").addEventListener("click", function() {
             document.getElementById("createStatus").innerHTML = "Loading...";
             let postData = new URLSearchParams();
@@ -12,7 +17,7 @@
             fetch("https://restarter.zirk.eu/userAddRequest", {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: postData
             })
@@ -34,7 +39,7 @@
             fetch("https://restarter.zirk.eu/userList", {
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: postData
             })

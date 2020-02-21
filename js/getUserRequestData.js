@@ -1,31 +1,32 @@
 {
     var url = new URL(window.location.href);
     let postData = new URLSearchParams();
-    postData.append('urlToken', url.searchParams.get("token"));
+    let urlToken = url.searchParams.get("token");
+    postData.append('urlToken', urlToken);
     fetch("https://restarter.zirk.eu/userAddRequestData", {
         method: 'POST',
         headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: postData
     })
     .then(response => {
         if (response.ok) {
-            return response.text();
+            return response.json();
         }
         throw new Error("HTTP " + response.status);
     })
     .then(response => {
         document.getElementById("userData").innerHTML = response.username;
     })
-    .catch(error => {
-        document.getElementById("userData").innerHTML = error;
+    .catch(_ => {
+        document.location.href = "login.html";
     });
 
     document.getElementById("createButton").addEventListener("click", function() {
-        document.getElementById("createButton").innerHTML = "Loading...";
+        document.getElementById("createStatus").innerHTML = "Loading...";
         let postData = new URLSearchParams();
-        postData.append('urlToken', url.searchParams.get("token"));
+        postData.append('urlToken', urlToken);
         postData.append('password', document.getElementById("password").value);
         fetch("https://restarter.zirk.eu/userAdd", {
             method: 'POST',
@@ -36,13 +37,13 @@
         })
         .then(response => {
             if (response.ok) {
-                return response.json();
+                return response.text();
             }
             throw new Error("HTTP " + response.status);
         })
-        .then(result => {
+        .then(_ => {
             document.location.href = "login.html";
         })
-        .catch(error => document.getElementById("createButton").innerHTML = error);
+        .catch(error => document.getElementById("createStatus").innerHTML = error);
     });
 }
