@@ -57,7 +57,34 @@
             .catch(error => document.getElementById("userList").innerHTML = error);
         }
 
+        function updateProgramInfos() {
+            let postData = new URLSearchParams();
+            postData.append('token', token);
+            fetch("https://restarter.zirk.eu/programList", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: postData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("HTTP " + response.status);
+            })
+            .then(result => {
+                let str = "";
+                result.processes.forEach(function(process) {
+                    str += process.name + ": " + process.isStopped + "<br/>";
+                });
+                document.getElementById("programList").innerHTML = str;
+            })
+            .catch(error => document.getElementById("programList").innerHTML = error);
+        }
+
         updateUserInfos();
+        updateProgramInfos();
 
         document.getElementById("createButton").addEventListener("click", function() {
             document.getElementById("createStatus").innerHTML = "Loading...";
@@ -82,6 +109,31 @@
                 document.getElementById("createStatus").innerHTML = "User created. Url: https://admin.zirk.eu/createUser?token=" + result.token;
             })
             .catch(error => document.getElementById("createStatus").innerHTML = error);
+        });
+
+        document.getElementById("programButton").addEventListener("click", function() {
+            document.getElementById("programStatus").innerHTML = "Loading...";
+            let postData = new URLSearchParams();
+            postData.append('path', document.getElementById("path").value);
+            postData.append('token', token);
+            fetch("https://restarter.zirk.eu/programAdd", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: postData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error("HTTP " + response.status);
+            })
+            .then(_ => {
+                document.getElementById("programStatus").innerHTML = "";
+                updateProgramInfos();
+            })
+            .catch(error => document.getElementById("programStatus").innerHTML = error);
         });
     }
 }
