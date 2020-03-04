@@ -131,6 +131,7 @@
             })
             .then(_ => {
                 document.getElementById("programStatus").innerHTML = "";
+                document.getElementById("path").value = "";
                 updateProgramInfos();
             })
             .catch(error => document.getElementById("programStatus").innerHTML = error);
