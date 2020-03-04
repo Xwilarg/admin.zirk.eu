@@ -57,6 +57,78 @@
             .catch(error => document.getElementById("userList").innerHTML = error);
         }
 
+        function startProgram(name) {
+            document.getElementById("restartStatus").innerHTML = "Loading...";
+            let postData = new URLSearchParams();
+            postData.append('token', token);
+            postData.append('name', name);
+            fetch("https://restarter.zirk.eu/programStart", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: postData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error("HTTP " + response.status);
+            })
+            .then(_ => {
+                document.getElementById("restartStatus").innerHTML = "Done";
+            })
+            .catch(error => console.error(error));
+        }
+
+        function stopProgram(name) {
+            document.getElementById("restartStatus").innerHTML = "Loading...";
+            let postData = new URLSearchParams();
+            postData.append('token', token);
+            postData.append('name', name);
+            fetch("https://restarter.zirk.eu/programStop", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: postData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error("HTTP " + response.status);
+            })
+            .then(_ => {
+                document.getElementById("restartStatus").innerHTML = "Done";
+            })
+            .catch(error => console.error(error));
+        }
+
+        function restartProgram(name) {
+            document.getElementById("restartStatus").innerHTML = "Loading...";
+            let postData = new URLSearchParams();
+            postData.append('token', token);
+            postData.append('name', name);
+            fetch("https://restarter.zirk.eu/programRestart", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: postData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                throw new Error("HTTP " + response.status);
+            })
+            .then(_ => {
+                document.getElementById("restartStatus").innerHTML = "Done";
+            })
+            .catch(error => console.error(error));
+        }
+
         function updateProgramInfos() {
             let postData = new URLSearchParams();
             postData.append('token', token);
@@ -76,7 +148,10 @@
             .then(result => {
                 let str = "";
                 result.processes.forEach(function(process) {
-                    str += process.name + ": " + process.isStopped + '<br/><textarea cols="100" rows="40">' + process.stdout + '</textarea><br/><br/>';
+                    str += process.name + ", is stopped: " + process.isStopped + '<br/><textarea cols="100" rows="20">' + process.stdout + '</textarea><br/>' +
+                    '<button onclick="startProgram(\'' + process.name + '\')">Start</button>' +
+                    '<button onclick="stopProgram(\'' + process.name + '\')">Stop</button>' +
+                    '<button onclick="restartProgram(\'' + process.name + '\')">Restart</button><br/><br/>';
                 });
                 document.getElementById("programList").innerHTML = str;
             })
