@@ -76,7 +76,7 @@
             .then(result => {
                 let str = "";
                 result.processes.forEach(function(process) {
-                    str += process.name + ": " + process.isStopped + "<br/>";
+                    str += process.name + ": " + process.isStopped + '<br/><textarea cols="100" rows="40">' + process.stdout + '</textarea><br/><br/>';
                 });
                 document.getElementById("programList").innerHTML = str;
             })
